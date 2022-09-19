@@ -32,7 +32,9 @@ impl CompA {
 impl CommandsA for CompA {
     async fn say_hello<'a, 'r>(&self) {
         let _ = self.tx.send(Messages::AsyncOp {
-            operation: Box::new(move |i: &mut CompAImpl| println!("Woha!")),
+            operation: Box::new(async move |i: &mut CompAImpl| {
+                i.say_hello().await;
+            }),
         });
     }
 }
@@ -55,6 +57,6 @@ impl CompAImpl {
 #[async_trait]
 impl CommandsA for CompAImpl {
     async fn say_hello<'a, 'r>(&self) {
-        todo!()
+        println!("Hello world!");
     }
 }
